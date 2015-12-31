@@ -10,7 +10,7 @@ var stringifyJSON = function(obj) {
 		return result = "\""+result+"\"";
 	}else if(typeof result === 'number' || typeof result === 'boolean' || result===null || result==='boolean'){
 		return result = String(result);
-	}else if(result===undefined || result==='undefined' || typeof result==='function'){
+	}else if(result===undefined){
 		return;
 	}
 	// recursive calls for arrays and objects
@@ -29,10 +29,10 @@ var stringifyJSON = function(obj) {
 		if(Object.keys(result).length===0){ return "{}"; }
 		var ans="";
 		for(var k in result){
-			if(typeof obj[k]==='function' || typeof obj[k]==='undefined'){
+			if(typeof result[k]==='function' || typeof result[k]==='undefined'){
 				return "{}";
 			}	
-			var tempV = stringifyJSON( obj[k] )
+			var tempV = stringifyJSON( result[k] )
 			var tempK = stringifyJSON( k );
 			ans = ans.concat(tempK+ ":" + tempV+",");
 		}
