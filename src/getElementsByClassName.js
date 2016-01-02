@@ -4,41 +4,30 @@
 // };
 
 // But instead we're going to implement it from scratch:
+
 var getElementsByClassName = function(className){
-	if(arguments.length>1){
-		var args = Array.prototype.slice.call(arguments, 1);
-		var x = args[0].childNodes;
-		var x = Array.prototype.filter.call(args[0].childNodes, function(el,i,coll){
-			if(el.nodeName !== '#text' && el.nodeName !== 'SCRIPT'){
-				return el;
-			};
-		});
-		// debugger;
-	}else{
-		var x = Array.prototype.filter.call(document.body.childNodes, function(el,i,coll){
-			if(el.nodeName !== '#text' && el.nodeName !== 'SCRIPT'){
-				return el;
-			};
+	var ans=[];
+	// If only className as argument, element default is document.body
+	var element = arguments.length>1 ? arguments[1] :  document.body
+
+	// Iterate through classList of element looking for match
+	Array.prototype.forEach.call(element.classList, function(name){
+		if( name==className ){ 
+			return 	ans = ans.concat(element); 
+		}
+	});
+	// Filter possible childNodes  
+	var lowerNodes = Array.prototype.filter.call(element.childNodes, function(el){
+		if(el.nodeName !== '#text' && el.nodeName !== 'SCRIPT'){
+			return el;
+		};
+	});
+	// If childNodes exist, recursive call on each childNode
+	if( lowerNodes !== undefined ){
+		Array.prototype.forEach.call(lowerNodes, function(el){	
+			ans = ans.concat(getElementsByClassName(className, el));
 		});
 	}
-	// debugger;
-	var y = Array.prototype.forEach.call(x, function(e,i,coll){
-			Array.prototype.forEach.call(e.classList, function(el){
-				debugger;
-				if(el === cl){
-					ans = ans.concat(e);
-				}
-			});
-		if(!(e.childNodes==undefined)){
-			// debugger;
-			getElementsByClassName(cl, e);
-		}else{
-			return;
-		}	
-	});
-	return ans;
 
-	// vs
-	
-	// return document.getElementsByClassName(cl)
+	return ans;
 };
